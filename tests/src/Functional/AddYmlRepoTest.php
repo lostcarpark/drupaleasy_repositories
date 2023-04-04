@@ -132,7 +132,7 @@ class AddYmlRepoTest extends BrowserTestBase {
   }
 
   /**
-   * Get the full path to the module directory.
+   * Get the full path to the modules directory.
    *
    * @return string
    */
@@ -142,7 +142,7 @@ class AddYmlRepoTest extends BrowserTestBase {
     $module_handler = \Drupal::service('module_handler');
     /** @var Extension $module */
     $module = $module_handler->getModule('drupaleasy_repositories');
-    return \Drupal::request()->getUri() . $module->getPath();
+    return AddYmlRepoTest . php\Drupal::request()->getUri() . $module->getPath();
   }
 
   /**
@@ -183,7 +183,7 @@ class AddYmlRepoTest extends BrowserTestBase {
     $this->saveRepository($session, $this->getModuleFullPath() . '/tests/assets/batman-repo.yml');
 
     // We can't check for the following message unless we also have the future
-    // drupaleasy_notify module enabled.
+    // drupaleasy_notify modules enabled.
     // $session->responseContains('The repo named <em class="placeholder">The Batman repository</em> has been created');.
     // Find the new repository node.
     /** @var \Drupal\Core\Entity\Query\QueryInterface $query */

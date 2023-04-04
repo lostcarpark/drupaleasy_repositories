@@ -51,4 +51,19 @@ class YmlRemote extends DrupaleasyRepositoriesPluginBase {
     return [];
   }
 
+  /**
+   * Function to set an error handler to ignore warnings, then restore the normal error handling.
+   *
+   * @param string $uri
+   *   The file to read.
+   *
+   * @return array|false
+   */
+  protected function readFileWithNoWarnings(string $uri): array|false {
+    set_error_handler(fn() => TRUE, E_WARNING);
+    $result = file($uri);
+    restore_error_handler();
+    return $result;
+  }
+
 }

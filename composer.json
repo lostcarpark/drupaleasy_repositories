@@ -1,0 +1,17 @@
+{
+    "name": "drupaleasy/drupaleasy_repositories",
+    "type": "drupal-custom-module",
+    "version": "1.0.0",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "James Shields",
+            "email": "james@lostcarpark.com"
+        }
+    ],
+    "require": {
+        "knplabs/github-api": "^3.0"
+    }
+}
