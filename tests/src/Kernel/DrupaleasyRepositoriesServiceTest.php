@@ -135,17 +135,18 @@ class DrupaleasyRepositoriesServiceTest extends KernelTestBase {
   /**
    * Test the ability for the service to ensure repositories are valid.
    *
-   * @covers       \Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService::validateRepositoryUrls
+   * @covers \Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService::validateRepositoryUrls
    * @dataProvider providerValidateRepositoryUrls
    * @test
-   * @throws PluginException
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function testValidateRepositoryUrls(string $expected, array $urls): void {
     $this->moduleHandler = \Drupal::service('module_handler');
     // Get the full path to the test .yml file.
     /** @var \Drupal\Core\Extension\Extension $module */
     $module = $this->moduleHandler->getModule('drupaleasy_repositories');
-    $module_full_path = DrupaleasyRepositoriesServiceTest . php\Drupal::request()->getUri() . $module->getPath();
+    $module_full_path = \Drupal::request()->getUri() . $module->getPath();
 
     foreach ($urls as $key => $url) {
       if (isset($url['uri'])) {

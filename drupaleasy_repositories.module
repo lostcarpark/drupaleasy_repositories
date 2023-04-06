@@ -37,7 +37,7 @@ function _drupaleasy_repositories_user_form_validate(array $form, FormStateInter
   $repository_service = \Drupal::service('drupaleasy_repositories.service');
   $username = $form_state->getValue('name');
   $user = user_load_by_name($username);
-  $uid = is_object($user) ? $user->id : 0;
+  $uid = is_object($user) ? $user->id() : 0;
   $error = $repository_service->validateRepositoryUrls($form_state->getValue('field_repository_url'), $uid);
 
   if ($error) {

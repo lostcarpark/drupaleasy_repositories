@@ -2,14 +2,6 @@
 
 namespace Drupal\Tests\drupaleasy_repositories\Functional;
 
-use Behat\Mink\Exception\ExpectationException;
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Core\Entity\EntityDisplayRepository;
-use Drupal\Core\Entity\EntityStorageException;
-use Drupal\Core\Extension\Extension;
-use Drupal\Core\Extension\ModuleHandler;
-use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\drupaleasy_repositories\Traits\RepositoryContentTypeTrait;
 use Drupal\Tests\WebAssert;
@@ -37,7 +29,7 @@ class AddYmlRepoTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
-   * @throws EntityStorageException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function setUp(): void {
     parent::setUp();
@@ -67,7 +59,7 @@ class AddYmlRepoTest extends BrowserTestBase {
     //   'label' => 'Repository URL',
     // ])->save();
 
-    /** @var EntityDisplayRepository $entity_display_repository  */
+    /** @var \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository  */
     $entity_display_repository = \Drupal::service('entity_display.repository');
     $entity_display_repository->getFormDisplay('user', 'user', 'default')
       ->setComponent('field_repository_url', ['type' => 'link_default'])
@@ -81,7 +73,8 @@ class AddYmlRepoTest extends BrowserTestBase {
    * plugin to enable, and submit the page successfully.
    *
    * @test
-   * @throws ExpectationException
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function testSettingsPage(): void {
     // Start the browsing session.
@@ -109,11 +102,11 @@ class AddYmlRepoTest extends BrowserTestBase {
   /**
    * Create user and log in.
    *
-   * @return WebAssert
+   * @return \Drupal\Tests\WebAssert
    *   The current browser session.
    *
-   * @throws EntityStorageException
-   * @throws ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function createAndLoginUser(): WebAssert {
     // Create and login as a Drupal user with permission to access
@@ -132,28 +125,29 @@ class AddYmlRepoTest extends BrowserTestBase {
   }
 
   /**
-   * Get the full path to the modules directory.
+   * Get the full path to the module's directory.
    *
    * @return string
+   *   The path to the directory of the module.
    */
   public function getModuleFullPath(): string {
     // Get the full path to the test .yml file.
-    /** @var ModuleHandler $module_handler */
+    /** @var \Drupal\Core\Extension\ModuleHandler $module_handler */
     $module_handler = \Drupal::service('module_handler');
-    /** @var Extension $module */
+    /** @var \Drupal\Core\Extension\Extension $module */
     $module = $module_handler->getModule('drupaleasy_repositories');
-    return AddYmlRepoTest . php\Drupal::request()->getUri() . $module->getPath();
+    return \Drupal::request()->getUri() . $module->getPath();
   }
 
   /**
    * Submit user profile form to save repository.
    *
-   * @param WebAssert $session
+   * @param \Drupal\Tests\WebAssert $session
    *   The current user session.
    * @param string $url
    *   The URL to save.
    *
-   * @throws ExpectationException
+   * @throws \Behat\Mink\Exception\ExpectationException
    */
   public function saveRepository(WebAssert $session, string $url): void {
     $edit = [
@@ -171,10 +165,11 @@ class AddYmlRepoTest extends BrowserTestBase {
    * that a repository node is successfully created upon saving the profile.
    *
    * @test
-   * @throws EntityStorageException
-   * @throws ExpectationException
-   * @throws PluginNotFoundException
-   * @throws InvalidPluginDefinitionException
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function testAddYmlRepo(): void {
     $session = $this->createAndLoginUser();
@@ -208,15 +203,14 @@ class AddYmlRepoTest extends BrowserTestBase {
   /**
    * Test that a yml repo can be removed from profile by a user.
    *
-   * @return void
-   * @throws ExpectationException
-   * @throws EntityStorageException
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  function testRemoveYmlRepo(): void {
+  public function testRemoveYmlRepo(): void {
     $session = $this->createAndLoginUser();
 
     // Add the test .yml file path and submit the form.
-    $this->saveRepository($session, $this->getModuleFullPath(). '/tests/assets/batman-repo.yml');
+    $this->saveRepository($session, $this->getModuleFullPath() . '/tests/assets/batman-repo.yml');
 
     // Add the test .yml file path and submit the form.
     $this->saveRepository($session, '');

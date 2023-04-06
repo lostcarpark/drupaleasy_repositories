@@ -3,14 +3,16 @@
 namespace Drupal\drupaleasy_repositories\Plugin\DrupaleasyRepositories;
 
 use Drupal\drupaleasy_repositories\DrupaleasyRepositories\DrupaleasyRepositoriesPluginBase;
+use Github\AuthMethod;
+use Github\Client;
 
 /**
  * Plugin implementation of the drupaleasy_repositories.
  *
  * @DrupaleasyRepositories(
  *   id = "github",
- *   label = @Translation("Remote .yml file"),
- *   description = @Translation("Remote .yml file that includes repository metadata.")
+ *   label = @Translation("GitHub repository"),
+ *   description = @Translation("Repository hosted on github.com.")
  * )
  */
 class GitHub extends DrupaleasyRepositoriesPluginBase {
@@ -40,21 +42,32 @@ class GitHub extends DrupaleasyRepositoriesPluginBase {
   public function getRepo(string $uri): array {
     // Parse the URI for the vendor and name.
     $all_parts = parse_url($uri);
-    $pats = explode('/', $all_parts['path']);
+    $parts = explode('/', $all_parts['path']);
 
     // Set up authentication.
     $this->setAuthentication();
 
     // Get the repository metadata from the GitHub API.
+    try {
+      $repo = $this->client->api('repo')->show($parts[1], $parts[2]);
+    }
+    catch (\Throwable $th) {
+      $this->messenger->addMessage($this->t('GitHub error: @error', [
+        '@error' => $th->getMessage(),
+      ]));
+      return [];
+    }
 
     // Map repository data to our common format.
-
-
-    return [];
+    return $this->mapToCommonFormat($repo['full_name'], $repo['name'], $repo['description'], $repo['open_issues_count'], $repo['html_url']);
   }
 
+  /**
+   * Set up the authentication for the repository.
+   */
   protected function setAuthentication(): void {
-
+    $this->client = new Client();
+    $this->client->authenticate('lostcarpark', '', AuthMethod::CLIENT_ID);
   }
 
 }

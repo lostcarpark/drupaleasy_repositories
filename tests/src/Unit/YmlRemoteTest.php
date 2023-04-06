@@ -24,7 +24,13 @@ class YmlRemoteTest extends UnitTestCase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->ymlRemote = new YmlRemote([], '', []);
+
+    // Mock the messenger object.
+    $this->messenger = $this->getMockBuilder('\Drupal\Core\Messenger\MessengerInterface')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $this->ymlRemote = new YmlRemote([], '', [], $this->messenger);
   }
 
   /**
