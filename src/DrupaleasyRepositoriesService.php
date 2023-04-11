@@ -31,7 +31,7 @@ class DrupaleasyRepositoriesService {
   /**
    * The entity type manager.
    *
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected EntityTypeManagerInterface $entityTypeManager;
 
@@ -262,7 +262,7 @@ class DrupaleasyRepositoriesService {
           $node->set('field_hash', $hash);
           if (!$this->dryRun) {
             $node->save();
-            //$this->repoUpdated($node, 'updated');
+            // $this->repoUpdated($node, 'updated');
           }
         }
       }
@@ -282,7 +282,7 @@ class DrupaleasyRepositoriesService {
         ]);
         if (!$this->dryRun) {
           $node->save();
-          //$this->repoUpdated($node, 'created');
+          // $this->repoUpdated($node, 'created');
         }
       }
     }
@@ -325,7 +325,7 @@ class DrupaleasyRepositoriesService {
       foreach ($nodes as $node) {
         if (!$this->dryRun) {
           $node->delete();
-          //$this->repoUpdated($node, 'deleted');
+          // $this->repoUpdated($node, 'deleted');
         }
       }
     }

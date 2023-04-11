@@ -29,6 +29,7 @@ class AddYmlRepoTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function setUp(): void {
@@ -43,21 +44,6 @@ class AddYmlRepoTest extends BrowserTestBase {
     // with $this->rootUser.
     $admin_user = $this->drupalCreateUser(['configure drupaleasy repositories']);
     $this->drupalLogin($admin_user);
-
-    // $this->createRepositoryContentType();
-    // // Create User entity Repository URL field.
-    // FieldStorageConfig::create([
-    //   'field_name' => 'field_repository_url',
-    //   'type' => 'link',
-    //   'entity_type' => 'user',
-    //   'cardinality' => -1,
-    // ])->save();
-    // FieldConfig::create([
-    //   'field_name' => 'field_repository_url',
-    //   'entity_type' => 'user',
-    //   'bundle' => 'user',
-    //   'label' => 'Repository URL',
-    // ])->save();
 
     /** @var \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository  */
     $entity_display_repository = \Drupal::service('entity_display.repository');
@@ -96,7 +82,7 @@ class AddYmlRepoTest extends BrowserTestBase {
     $session->statusCodeEquals(200);
     $session->responseContains('The configuration options have been saved.');
     $session->checkboxChecked('edit-repositories-yml-remote');
-    // $session->checkboxNotChecked('edit-repositories-github');
+    $session->checkboxNotChecked('edit-repositories-github');
   }
 
   /**
@@ -189,7 +175,7 @@ class AddYmlRepoTest extends BrowserTestBase {
 
     $entity_type_manager = \Drupal::entityTypeManager();
     $node_storage = $entity_type_manager->getStorage('node');
-    /** @var NodeInterface $node */
+    /** @var \Drupal\node\NodeInterface $node */
     $node = $node_storage->load(reset($results));
 
     // Check values.

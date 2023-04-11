@@ -36,7 +36,7 @@ class SettingsForm extends ConfigFormBase {
    * @param \Drupal\drupaleasy_repositories\DrupaleasyRepositories\DrupaleasyRepositoriesPluginManager $drupaleasy_repositories_manager
    *   The DrupalEasy repositories manager service.
    */
-  final public function __construct(ConfigFactoryInterface $config_factory, DrupaleasyRepositoriesPluginManager $drupaleasy_repositories_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, DrupaleasyRepositoriesPluginManager $drupaleasy_repositories_manager) {
     parent::__construct($config_factory);
     $this->repositoriesManager = $drupaleasy_repositories_manager;
   }

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\drupaleasy_repositories\Kernel;
 
-use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService;
 use Drupal\KernelTests\KernelTestBase;
@@ -31,6 +30,7 @@ class DrupaleasyRepositoriesServiceTest extends KernelTestBase {
     'text',
     'link',
     'user',
+    'key',
   ];
 
   /**
@@ -111,12 +111,15 @@ class DrupaleasyRepositoriesServiceTest extends KernelTestBase {
   /**
    * Test the DrupaleasyRepositoriesService::isUnique method.
    *
-   * @covers       \Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService::isUnique
+   * @param bool $expected
+   *   Whether we expect repo to be unique.
+   * @param array $repo
+   *   The repo to check.
+   *
+   * @covers \Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService::isUnique
    * @dataProvider providerTestIsUnique
    * @test
-   * @param bool $expected
-   * @param array $repo
-   * @return void
+   *
    * @throws \ReflectionException
    */
   public function testIsUnique(bool $expected, array $repo): void {
@@ -187,23 +190,26 @@ class DrupaleasyRepositoriesServiceTest extends KernelTestBase {
   protected function getRepo(string $repo): array {
     // The order of elements of this array matters when calculating the hash.
     return match($repo) {
-      'aquaman' => ['aquaman-repository' => [
-        'label' => 'The Aquaman repository',
-        'description' => 'This is where Aquaman keeps all his crime-fighting code.',
-        'num_open_issues' => 6,
-        'source' => 'yml',
-        'url' => 'http://example.com/aquaman-repo.yml',
-      ]],
-      'superman' => ['superman-repo' => [
-        'label' => 'The Superman repository',
-        'description' => 'This is where Superman keeps all his crime-fighting code.',
-        'num_open_issues' => 0,
-        'source' => 'yml',
-        'url' => 'https://example.com/superman-repo.yml',
-      ]],
+      'aquaman' => [
+        'aquaman-repository' => [
+          'label' => 'The Aquaman repository',
+          'description' => 'This is where Aquaman keeps all his crime-fighting code.',
+          'num_open_issues' => 6,
+          'source' => 'yml',
+          'url' => 'http://example.com/aquaman-repo.yml',
+        ],
+      ],
+      'superman' => [
+        'superman-repo' => [
+          'label' => 'The Superman repository',
+          'description' => 'This is where Superman keeps all his crime-fighting code.',
+          'num_open_issues' => 0,
+          'source' => 'yml',
+          'url' => 'https://example.com/superman-repo.yml',
+        ],
+      ],
       default => []
     };
-    return $repo;
   }
 
 }

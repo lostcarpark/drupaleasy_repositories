@@ -67,7 +67,8 @@ class GitHub extends DrupaleasyRepositoriesPluginBase {
    */
   protected function setAuthentication(): void {
     $this->client = new Client();
-    $this->client->authenticate('lostcarpark', '', AuthMethod::CLIENT_ID);
+    $github_key = $this->keyRepository->getKey('github')->getKeyValues();
+    $this->client->authenticate($github_key['username'], $github_key['personal_access_token'], AuthMethod::CLIENT_ID);
   }
 
 }

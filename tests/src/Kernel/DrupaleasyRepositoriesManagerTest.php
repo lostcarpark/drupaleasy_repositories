@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\drupaleasy_repositories\Kernel;
 
-use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\drupaleasy_repositories\DrupaleasyRepositories\DrupaleasyRepositoriesPluginManager;
 use Drupal\KernelTests\KernelTestBase;
 
@@ -16,7 +15,10 @@ class DrupaleasyRepositoriesManagerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['drupaleasy_repositories'];
+  protected static $modules = [
+    'drupaleasy_repositories',
+    'key',
+  ];
 
   /**
    * The Drupaleasy Repositories Manager.
@@ -27,6 +29,7 @@ class DrupaleasyRepositoriesManagerTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
+   *
    * @throws \Exception
    */
   protected function setUp(): void {
@@ -38,7 +41,8 @@ class DrupaleasyRepositoriesManagerTest extends KernelTestBase {
    * Test creating an instance of the .yml Remote plugin.
    *
    * @test
-   * @throws PluginException
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function testYmlRemoteInstance(): void {
     /** @var \Drupal\drupaleasy_repositories\DrupaleasyRepositories\DrupaleasyRepositoriesInterface $example_instance */

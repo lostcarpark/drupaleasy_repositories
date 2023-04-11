@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\drupaleasy_repositories\Unit;
 
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\key\KeyRepositoryInterface;
 use Drupal\drupaleasy_repositories\Plugin\DrupaleasyRepositories\YmlRemote;
 use Drupal\Tests\UnitTestCase;
 
@@ -20,6 +22,20 @@ class YmlRemoteTest extends UnitTestCase {
   protected YmlRemote $ymlRemote;
 
   /**
+   * Spoof the messenger object.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected MessengerInterface $messenger;
+
+  /**
+   * Spoof the key repository.
+   *
+   * @var \Drupal\key\KeyRepositoryInterface
+   */
+  protected KeyRepositoryInterface $keyRepository;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -30,7 +46,12 @@ class YmlRemoteTest extends UnitTestCase {
       ->disableOriginalConstructor()
       ->getMock();
 
-    $this->ymlRemote = new YmlRemote([], '', [], $this->messenger);
+    // Mock the key.repository object.
+    $this->keyRepository = $this->getMockBuilder('\Drupal\key\KeyRepositoryInterface')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $this->ymlRemote = new YmlRemote([], '', [], $this->messenger, $this->keyRepository);
   }
 
   /**
@@ -106,7 +127,6 @@ class YmlRemoteTest extends UnitTestCase {
    * @covers ::validate
    * @test
    */
-
   public function testValidate(string $testString, bool $expected): void {
     self::assertEquals($expected, $this->ymlRemote->validate($testString), "Validation of '$testString' does not return '$expected'.");
   }
