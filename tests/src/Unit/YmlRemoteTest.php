@@ -3,9 +3,9 @@
 namespace Drupal\Tests\drupaleasy_repositories\Unit;
 
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\key\KeyRepositoryInterface;
 use Drupal\drupaleasy_repositories\Plugin\DrupaleasyRepositories\YmlRemote;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test description.
@@ -31,9 +31,9 @@ class YmlRemoteTest extends UnitTestCase {
   /**
    * Spoof the key repository.
    *
-   * @var \Drupal\key\KeyRepositoryInterface
+   * @var \Drupal\Core\Messenger\MessengerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
-  protected KeyRepositoryInterface $keyRepository;
+  protected MessengerInterface|MockObject $keyRepository;
 
   /**
    * {@inheritdoc}

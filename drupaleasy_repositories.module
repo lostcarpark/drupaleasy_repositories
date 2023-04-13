@@ -8,6 +8,7 @@
 use Drupal\Core\Render\Element;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -93,4 +94,47 @@ function _drupaleasy_repositories_url_help_text(array &$element, FormStateInterf
   }
   $element['uri']['#description_display'] = 'before';
   return $element;
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param UserInterface $account
+ *   The logged in user.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\PluginException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function drupaleasy_repositories_user_login(UserInterface $account): void {
+  /** @var \Drupal\drupaleasy_repositories\DrupaleasyRepositoriesService $der */
+  $der = \Drupal::service('drupaleasy_repositories.service');
+
+  /** @var \Drupal\Core\Messenger\MessengerInterface $messenger */
+  $messenger = \Drupal::service('messenger');
+
+  if ($der->updateRepositories($account)) {
+    $messenger->addStatus(t('Repository nodes updated'));
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function drupaleasy_repositories_cron(): void {
+  // Only update once per day.
+  $hour = time() / 3600 % 24;
+  // Assumes cron only once per hour.
+  if ($hour == 1) {
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $user_storage */
+    $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
+    $users = $user_storage->getQuery()
+      ->condition('status', '1')
+      ->accessCheck(false)
+      ->execute();
+
+    $queue = \Drupal::queue('drupaleasy_repository_node_updater');
+    foreach ($users as $uid => $user) {
+      $queue->createItem(['uid' => $uid]);
+    }
+  }
 }

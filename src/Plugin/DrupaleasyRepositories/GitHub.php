@@ -11,7 +11,7 @@ use Github\Client;
  *
  * @DrupaleasyRepositories(
  *   id = "github",
- *   label = @Translation("GitHub repository"),
+ *   label = @Translation("GitHub"),
  *   description = @Translation("Repository hosted on github.com.")
  * )
  */
