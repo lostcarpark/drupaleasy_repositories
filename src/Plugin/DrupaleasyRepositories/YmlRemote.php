@@ -41,7 +41,7 @@ class YmlRemote extends DrupaleasyRepositoriesPluginBase {
   public function getRepo(string $uri): array {
     // file_exists doesn't work with files over http.
     if (file($uri)) {
-      if ($file_content = file_get_contents($uri)) {
+      if ($file_content = $this->readFileWithNoWarnings($uri)) {
         $repo_info = Yaml::decode($file_content);
         $machine_name = array_key_first($repo_info);
         $repo = reset($repo_info);
@@ -52,16 +52,17 @@ class YmlRemote extends DrupaleasyRepositoriesPluginBase {
   }
 
   /**
-   * Function to set an error handler to ignore warnings, then restore the normal error handling.
+   * Function to set temporary error handler and read file.
    *
    * @param string $uri
    *   The file to read.
    *
-   * @return array|false
+   * @return string|false
+   *   Returns file contents as string, or false if file not found.
    */
-  protected function readFileWithNoWarnings(string $uri): array|false {
+  protected function readFileWithNoWarnings(string $uri): string|false {
     set_error_handler(fn() => TRUE, E_WARNING);
-    $result = file($uri);
+    $result = file_get_contents($uri);
     restore_error_handler();
     return $result;
   }
